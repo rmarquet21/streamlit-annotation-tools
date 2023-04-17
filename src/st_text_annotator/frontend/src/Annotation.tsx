@@ -93,8 +93,8 @@ class Annotation extends StreamlitComponentBase<State> {
   private renderHighlightedText = () => {
     const { annotations, text: total_text } = this.state
 
-    const selectedAnnotations = annotations.map((listAnnotation, index) => {
-      return listAnnotation.map((annotation) => {
+    const selectedAnnotations = annotations.map((liStTextAnnotator, index) => {
+      return liStTextAnnotator.map((annotation) => {
         return {
           ...annotation,
           index,

@@ -1,1 +1,1 @@
-recursive-include st_annotation/frontend/build *
+recursive-include src/st_text_annotator/frontend/build *

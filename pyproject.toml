@@ -1,14 +1,15 @@
 [tool.poetry]
-name = "streamlit-annotation"
-version = "0.0.1"
+name = "st-text-annotator"
+version = "0.2.0"
 description = "Component for annotating text for NLP resolution"
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent"]
 authors = ["Robin Marquet <robin.marquet@epitech.eu>"]
-license = "MIT License"
+license = "MIT"
 readme = "README.md"
-exclude = ["**/node_modules/**/*", "**/frontend/src/**/*", "**/.yarn/**/*"]
-include = ["**/frontend/build/**/*"]
-packages = [{include = "st_annotation", from = "libs"}]
+keywords = ["streamlit", "text", "annotation", "nlp"]
+include = ["./src/st_text_annotator/frontend/build/**/*"]
+exclude = ["**/node_modules/**/*"]
+packages = [{include = "st_text_annotator", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.8,<3.9"

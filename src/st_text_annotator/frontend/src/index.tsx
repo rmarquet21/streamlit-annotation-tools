@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import MyComponent from "./Annotation"
+import MyComponent from "./AnnotationNew"
 
 ReactDOM.render(
   <React.StrictMode>

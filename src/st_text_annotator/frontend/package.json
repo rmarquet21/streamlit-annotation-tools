@@ -1,6 +1,6 @@
 {
-  "name": "steamlit_annotation",
-  "version": "0.0.1",
+  "name": "steamlit-text-annotator",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@types/jest": "^24.0.0",
