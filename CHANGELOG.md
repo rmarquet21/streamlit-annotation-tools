@@ -12,12 +12,14 @@ straightforward as possible.
  
 ### Fixed
 
+## [0.2.2] - 2023-04-17
+
+### Fixed
+
+- Fix import of build
+
 ## [0.2.0] - 2023-04-17
  
 ### Added
 
 - Initial release
-   
-### Changed
- 
-### Fixed
