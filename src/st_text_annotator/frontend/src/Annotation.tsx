@@ -3,7 +3,7 @@ import {
   StreamlitComponentBase,
   withStreamlitConnection,
 } from "streamlit-component-lib"
-import React, { ReactNode } from "react"
+import React from "react"
 
 interface Reference {
   start: number,
@@ -18,195 +18,249 @@ interface State {
   annotations: Reference[][]
 }
 
-const COLOR = "#fbf8cc"
-
-
 class Annotation extends StreamlitComponentBase<State> {
-  public state: State = { text: "", actual_text: [], annotations: [], selectedReference: 0 }
+  state: State = {
+    text: "",
+    actual_text: [],
+    annotations: [],
+    selectedReference: 0
+  }
 
-  public async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     const { text, annotations } = this.props.args
 
     await this.setState({ text, annotations })
+    await this.setState({ actual_text: this.renderText() })
+    Streamlit.setComponentValue(annotations)
+  }
 
-    let actual_text = [<>{ text }</>]
-
-    if (annotations.length > 0) {
-      actual_text = this.renderHighlightedText()
+  isAnnotated(start: number, end: number): boolean {
+    const { annotations, selectedReference } = this.state
+    
+    if (!annotations[selectedReference]) {
+      return false
     }
-    this.setState({ actual_text })
-    Streamlit.setComponentValue({ annotations: annotations })
-  }
 
-  private checkOverlap = (start: number, end: number, annotations: Reference[]) => {
-    return annotations.some((annotation) => {
-      return (annotation.start < start && annotation.end > start) || (annotation.start < end && annotation.end > end)
-    })
-  }
-
-  private handleMouseUp = () => {
-    const selection = document.getSelection()
-
-    if (selection && selection.toString().length > 0) {
-      const { annotations } = this.state
-
-      const start = selection.anchorOffset < selection.focusOffset ? selection.anchorOffset : selection.focusOffset
-      const end = selection.anchorOffset < selection.focusOffset ? selection.focusOffset : selection.anchorOffset
-
-      const selected_text = this.state.text.slice(start, end)
-
-      if (annotations.length < this.state.selectedReference + 1) {
-        annotations.push([])
-      }
-
+    for (let i = 0; i < annotations[selectedReference].length; i++) {
       if (
-        this.checkOverlap(start, end, annotations[this.state.selectedReference]) && annotations[this.state.selectedReference].length === 1
-      ) {
-        annotations.splice(this.state.selectedReference, 1)
+        (start >= annotations[selectedReference][i].start && end <= annotations[selectedReference][i].end) ||
+        (start <= annotations[selectedReference][i].start && end >= annotations[selectedReference][i].end) ||
+        (start <= annotations[selectedReference][i].start && end > annotations[selectedReference][i].start && end <= annotations[selectedReference][i].end) ||
+        (start >= annotations[selectedReference][i].start && start < annotations[selectedReference][i].end && end >= annotations[selectedReference][i].end)
+        ) {
+        return true
       }
-      // if overlap with other annotation remove the smaller one
-      else if (this.checkOverlap(start, end, annotations[this.state.selectedReference])) {
-        annotations[this.state.selectedReference] = annotations[this.state.selectedReference].filter((annotation) => {
-          return !((annotation.start < start && annotation.end > start) || (annotation.start < end && annotation.end > end))
-        })
-      } else {
-        annotations[this.state.selectedReference].push({
-          start,
-          end,
-          label: selected_text,
-        })
-      }
-
-      Streamlit.setComponentValue({ annotations: annotations })
     }
-    this.setState({ actual_text: this.renderHighlightedText() })
+    return false
   }
 
-  private handleMouseDown = () => {
-    this.setState({ actual_text: [<>{ this.state.text }</>] })
+  removeAnnotation(start: number, end: number): Reference[][] {
+    const { annotations, selectedReference } = this.state
+
+    for (let i = 0; i < annotations[selectedReference].length; i++) {
+      if (
+        (start >= annotations[selectedReference][i].start && end <= annotations[selectedReference][i].end) ||
+        (start <= annotations[selectedReference][i].start && end >= annotations[selectedReference][i].end) ||
+        (start <= annotations[selectedReference][i].start && end > annotations[selectedReference][i].start && end <= annotations[selectedReference][i].end) ||
+        (start >= annotations[selectedReference][i].start && start < annotations[selectedReference][i].end && end >= annotations[selectedReference][i].end)
+        ) {
+        annotations[selectedReference].splice(i, 1)
+        break
+      }
+    }
+
+    if (annotations[selectedReference].length === 0) {
+      annotations.splice(selectedReference, 1)
+    }
+
+    return annotations
   }
 
-  private newReference = () => {
-    this.setState({ selectedReference: this.state.annotations.length })
+  getCharactersCountUntilNode = (node: Node, parent: HTMLElement | null) => {
+    const walker = document.createTreeWalker(
+      parent || document.body,
+      NodeFilter.SHOW_TEXT,
+      null,
+    );
+    
+    let charCount = 0;
+    while (walker.nextNode()) {
+      if (walker.currentNode === node) {
+        break;
+      }
+      charCount += walker.currentNode.textContent?.length || 0;
+    }
+
+    return charCount;
   }
 
-  private renderHighlightedText = () => {
-    const { annotations, text: total_text } = this.state
+  handleMouseUp = async () => {
+    const selection = document.getSelection()?.getRangeAt(0)
 
-    const selectedAnnotations = annotations.map((liStTextAnnotator, index) => {
-      return liStTextAnnotator.map((annotation) => {
-        return {
-          ...annotation,
-          index,
-          color: COLOR,
-          text: total_text.slice(annotation.start, annotation.end),
+    if (selection && selection.toString().trim() !== "") {
+      let selectedText = selection.toString()
+
+      let startIndex = selection.startOffset
+      let endIndex = selection.endOffset
+
+      const container = document.getElementById("actual-text")
+      const charsBeforeStart = this.getCharactersCountUntilNode(selection.startContainer, container);
+      const charsBeforeEnd = this.getCharactersCountUntilNode(selection.endContainer, container);
+
+      startIndex += charsBeforeStart
+      endIndex += charsBeforeEnd
+
+      while (document.querySelector("#actual-text")?.textContent?.charAt(startIndex - 1) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(startIndex - 1) !== undefined) {
+        if (document.querySelector("#actual-text")?.textContent?.charAt(startIndex - 1) === '') {
+          break
         }
-      })
-    }).filter((annotation, index) => index === this.state.selectedReference)
 
-    // flatten array
-    const flattenAnnotations = selectedAnnotations.flat()
+        startIndex -= 1
+      }
 
-    // sort by start
-    const sortedAnnotations = flattenAnnotations.sort((a, b) => a.start - b.start)
+      while (document.querySelector("#actual-text")?.textContent?.charAt(endIndex) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(endIndex) !== undefined) {
+        if (document.querySelector("#actual-text")?.textContent?.charAt(endIndex) === '') {
+          break
+        }
 
-    // render text with color
-    let lastEnd = 0
+        endIndex += 1
+      }
 
-    if (sortedAnnotations.length === 0) {
-      return [<>{ total_text }</>]
+      selectedText = document.querySelector("#actual-text")?.textContent?.slice(startIndex, endIndex) || ""
+
+      // remove commas, periods, etc. from the end of the selection
+      const re = /[.,/#!$%^&*;:{}=\-_`~()]$/g
+      while (selectedText.match(re)) {
+        selectedText = selectedText.slice(0, -1)
+        endIndex -= 1
+      }
+
+      const { annotations, selectedReference } = this.state
+
+      if (!annotations[selectedReference]) {
+        annotations[selectedReference] = []
+      }
+
+      if (this.isAnnotated(startIndex, endIndex)) {
+        const newAnnotations = this.removeAnnotation(startIndex, endIndex)
+        await this.setState({ annotations: newAnnotations })
+      } else {
+        annotations[selectedReference].push({ start: startIndex, end: endIndex, label: selectedText })
+        await this.setState({ annotations })
+      }
+
+      Streamlit.setComponentValue(annotations)
     }
 
-    return sortedAnnotations.map((annotation, index_annotations, array) => {
-      const { start, end, color, text, index } = annotation
-      const textBefore = total_text.slice(lastEnd, start)
-      lastEnd = end
-
-      return (
-        <>
-          { textBefore }
-          <span style={ {
-            backgroundColor: this.state.selectedReference === index ? color : "transparent",
-            color: this.state.selectedReference === index ? "black" : "white",
-          } }>{ text }</span>
-          { index_annotations === array.length - 1 && total_text.slice(end) }
-        </>
-      )
-    })
+    this.setState({ actual_text: this.renderText() })
   }
 
-  public render = (): ReactNode => {
+  async addReference(): Promise<void> {
+    const { annotations } = this.state
+
+    // if selected annotation is empty do not add a new one
+    if (annotations[this.state.selectedReference] && annotations[this.state.selectedReference].length === 0) {
+      return
+    }
+
+    const index = annotations.length + 1
+    
+    if (!annotations[index]) {
+      annotations[index] = []
+    }
+
+    await this.setState({ 
+      selectedReference: index,
+      annotations
+    })
+
+    this.setState({ actual_text: this.renderText() })
+  }
+
+  async selectReference(index: number): Promise<void> {
+    if (this.state.selectedReference === index || !this.state.annotations[index]) {
+      return
+    }
+
+    await this.setState({ selectedReference: index })
+    this.setState({ actual_text: this.renderText() })
+  }
+
+  async removeReference(index: number): Promise<void> {
+    const { annotations } = this.state
+
+    annotations.splice(index, 1)
+
+    await this.setState({ annotations, selectedReference: 0 })
+    this.setState({ actual_text: this.renderText() })
+    Streamlit.setComponentValue(annotations)
+  }
+
+  renderText(): JSX.Element[] {
+    const { text, annotations, selectedReference } = this.state
+    const actual_text: JSX.Element[] = []
+
+    if (!annotations[selectedReference]) {
+      return [<span>{text}</span>]
+    }
+
+
+    let start = 0
+
+    if (annotations[selectedReference].length > 0) {
+      annotations[selectedReference].sort((a, b) => a.start - b.start)
+    }
+
+    annotations[selectedReference].forEach((annotation, index) => {
+      actual_text.push(<span>{text.substring(start, annotation.start)}</span>)
+      actual_text.push(<span className="annotated bg-blue-500 text-gray-100">{text.substring(annotation.start, annotation.end)}</span>)
+      start = annotation.end
+    })
+    actual_text.push(<span>{text.substring(start, text.length)}</span>)
+
+
+    return actual_text
+  }
+
+  render(): React.ReactNode {
     return (
-      <>
-        <div>
-          <button
-            onClick={ this.newReference }
-            style={ { backgroundColor: "transparent", color: "white", border: "1px solid white" } }
-          >
-            New Reference
-          </button>
-          <div style={ { display: "flex", flexDirection: "column", flexWrap: "wrap" } }>
-            { // get selected reference
-              this.state.annotations.map((annotation, index) => {
-                return (
-                  <div
-                    key={ index }
-                    style={ { textAlign: "start" } }
-                  >
-                    <button
-                      onClick={ async () => {
-                        await this.setState({ selectedReference: index })
-                        this.setState({ actual_text: this.renderHighlightedText() })
-                      } }
-                      style={ {
-                        backgroundColor: this.state.selectedReference !== index ? "transparent" : COLOR,
-                        color: this.state.selectedReference !== index ? "white" : "black",
-                        fontWeight: this.state.selectedReference === index ? "bold" : "normal",
-                        border: this.state.selectedReference === index ? "1px solid white" : "1px solid transparent",
-                        width: "400px",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                        textAlign: "start",
-                      } }>
-                      { annotation[0].label}
-                    </button>
-                    <button
-                      onClick={ async () => {
-                        await this.setState({
-                          annotations: this.state.annotations.filter((_, i) => i !== index),
-                          selectedReference: this.state.selectedReference === index ? 0 : this.state.selectedReference,
-                        })
-                        this.setState({ actual_text: this.renderHighlightedText() })
-                        Streamlit.setComponentValue({ annotations: this.state.annotations.filter((_, i) => i !== index) })
-                      } }
-                      style={ {
-                        backgroundColor: this.state.selectedReference !== index ? "transparent" : COLOR,
-                        color: this.state.selectedReference !== index ? "white" : "black",
-                        fontWeight: this.state.selectedReference === index ? "bold" : "normal",
-                        border: this.state.selectedReference === index ? "1px solid white" : "1px solid transparent",
-                      } }>
-                      X
-                    </button>
-                  </div>
-                )
-              })
-            }
-          </div>
-        </div>
-        <br/>
-        <br/>
-        <div>
+      <div>
+        <div className="flex flex-row flex-wrap">
           <div
-            id="text" style={ { whiteSpace: "pre-wrap" } }
-            onMouseUp={ this.handleMouseUp }
-            onMouseDown={ this.handleMouseDown }
-          >
-            { this.state.actual_text }
+            className="flex flex-wrap px-4 py-2 m-1 justify-between items-center text-sm font-medium cursor-pointer hover:bg-blue-600 hover:text-gray-100 bg-blue-500 text-gray-100"
+            onClick={ () => this.addReference() }
+            >
+            <span>Add</span>
           </div>
+          {this.state.annotations.map((reference, index) => (
+            <span
+              key={index}
+              className={"flex flex-wrap pl-4 pr-2 py-2 m-1 justify-between items-center text-sm font-medium cursor-pointer hover:bg-blue-600 hover:text-gray-100" + (this.state.selectedReference === index ? " bg-blue-500 text-gray-100" : " bg-blue-900 text-gray-200")}
+              onClick={() => { this.selectReference(index) }}
+            >
+              {reference[0]?.label}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 ml-3 hover:text-gray-300" viewBox="0 0 20 20"
+                fill="currentColor"
+                onClick={() => { this.removeReference(index) }}
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                />
+              </svg>
+            </span>
+          ))}
         </div>
-      </>
+        <div id="actual-text" className="mt-5 h-full" onMouseUp={this.handleMouseUp}>
+          {this.state.actual_text}
+        </div>
+      </div>
     )
   }
 }
 
+
 export default withStreamlitConnection(Annotation)
+

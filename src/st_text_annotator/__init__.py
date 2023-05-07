@@ -76,6 +76,19 @@ if __name__ == "__main__":
 
     st.title("StTextAnnotator")
 
-    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tristique est a nunc pretium, vel condimentum felis imperdiet. Curabitur lobortis fermentum odio, et dignissim tellus ultrices sit amet. Ut elementum non dolor in efficitur. Vestibulum mauris ante, convallis laoreet luctus quis, sollicitudin nec turpis. Nulla nec viverra enim. Morbi ornare lorem vel odio rutrum, ac condimentum dolor egestas. Suspendisse potenti. Proin sit amet egestas lectus. In lobortis posuere condimentum. Suspendisse potenti. Aenean ultricies ex at ipsum ullamcorper consequat. Aenean pretium orci at dui aliquam egestas."
+    text = "Lorem ipsum dolor sit et amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
 
-    StTextAnnotator(text)
+    annotations = [
+      [
+        { "start": 0, "end": 5, "label": "Lorem" },
+        { "start": 12, "end": 17, "label": "dolor" },
+      ],
+      [
+        { "start": 6, "end": 11, "label": "ipsum" },
+        { "start": 18, "end": 21, "label": "sit" },
+      ]
+    ]
+    
+    annotations = StTextAnnotator(text, annotations)
+    
+    print(annotations)

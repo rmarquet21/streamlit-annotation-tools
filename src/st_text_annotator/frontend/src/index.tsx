@@ -1,10 +1,8 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import MyComponent from "./AnnotationNew"
+import { createRoot } from 'react-dom/client';
+import MyComponent from "./Annotation"
+import React from 'react';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <MyComponent />
-  </React.StrictMode>,
-  document.getElementById("root")
-)
+const container = document.getElementById("root")
+const root = createRoot(container)
+
+root.render(<MyComponent />)

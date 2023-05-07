@@ -12,6 +12,20 @@ straightforward as possible.
  
 ### Fixed
 
+## [0.3.0] - 2023-05-08
+
+### Added
+
+- New UI
+
+### Changed
+
+- Update to latest version of `React v18`
+
+### Fixed
+
+- Text dispear on hover
+
 ## [0.2.2] - 2023-04-17
 
 ### Fixed
