@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "st-text-annotator"
-version = "0.3.0"
+version = "0.3.1"
 description = "Component for annotating text for NLP resolution"
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent"]
 authors = ["Robin Marquet <robin.marquet@epitech.eu>"]

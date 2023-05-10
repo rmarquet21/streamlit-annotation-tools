@@ -2,7 +2,7 @@ import os
 
 import streamlit.components.v1 as components
 
-RELEASE = True
+RELEASE = False
 
 if not RELEASE:
     _component_func = components.declare_component("st_text_annotator", url="http://localhost:3001")
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     st.title("StTextAnnotator")
 
-    text = "Lorem ipsum dolor sit et amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    text = "Lorem ipsum dolor sit et amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, Apple Inc. is good company"
 
     annotations = [
       [

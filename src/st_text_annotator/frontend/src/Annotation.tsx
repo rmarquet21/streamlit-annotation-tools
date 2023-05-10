@@ -102,6 +102,8 @@ class Annotation extends StreamlitComponentBase<State> {
 
       let startIndex = selection.startOffset
       let endIndex = selection.endOffset
+      let startAdjustment = 0
+      let endAdjustment = 0
 
       const container = document.getElementById("actual-text")
       const charsBeforeStart = this.getCharactersCountUntilNode(selection.startContainer, container);
@@ -110,29 +112,31 @@ class Annotation extends StreamlitComponentBase<State> {
       startIndex += charsBeforeStart
       endIndex += charsBeforeEnd
 
-      while (document.querySelector("#actual-text")?.textContent?.charAt(startIndex - 1) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(startIndex - 1) !== undefined) {
-        if (document.querySelector("#actual-text")?.textContent?.charAt(startIndex - 1) === '') {
+      while (document.querySelector("#actual-text")?.textContent?.charAt(startIndex + startAdjustment - 1) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(startIndex + startAdjustment - 1) !== undefined) {
+        if (document.querySelector("#actual-text")?.textContent?.charAt(startIndex + startAdjustment - 1) === '') {
           break
         }
 
-        startIndex -= 1
+        startAdjustment -= 1
       }
 
-      while (document.querySelector("#actual-text")?.textContent?.charAt(endIndex) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(endIndex) !== undefined) {
-        if (document.querySelector("#actual-text")?.textContent?.charAt(endIndex) === '') {
+      while (document.querySelector("#actual-text")?.textContent?.charAt(endIndex + endAdjustment) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(endIndex + endAdjustment) !== undefined) {
+        if (document.querySelector("#actual-text")?.textContent?.charAt(endIndex + endAdjustment) === '') {
           break
         }
 
-        endIndex += 1
+        endAdjustment += 1
       }
 
-      selectedText = document.querySelector("#actual-text")?.textContent?.slice(startIndex, endIndex) || ""
+      selectedText = document.querySelector("#actual-text")?.textContent?.slice(startIndex + startAdjustment, endIndex + endAdjustment) || ""
 
-      // remove commas, periods, etc. from the end of the selection
-      const re = /[.,/#!$%^&*;:{}=\-_`~()]$/g
-      while (selectedText.match(re)) {
-        selectedText = selectedText.slice(0, -1)
-        endIndex -= 1
+      // remove commas, periods, etc. from the end of the selection if end adjustment is superior to 0
+      if (endAdjustment > 0) {
+        const re = /[.,/#!$%^&*;:{}=\-_`~()]$/g
+        while (selectedText.match(re)) {
+          selectedText = selectedText.slice(0, -1)
+          endAdjustment -= 1
+        }
       }
 
       const { annotations, selectedReference } = this.state
@@ -141,11 +145,14 @@ class Annotation extends StreamlitComponentBase<State> {
         annotations[selectedReference] = []
       }
 
-      if (this.isAnnotated(startIndex, endIndex)) {
-        const newAnnotations = this.removeAnnotation(startIndex, endIndex)
+      const finalStartIndex = startIndex + startAdjustment
+      const finalEndIndex = endIndex + endAdjustment
+
+      if (this.isAnnotated(finalStartIndex, finalEndIndex)) {
+        const newAnnotations = this.removeAnnotation(finalStartIndex, finalEndIndex)
         await this.setState({ annotations: newAnnotations })
       } else {
-        annotations[selectedReference].push({ start: startIndex, end: endIndex, label: selectedText })
+        annotations[selectedReference].push({ start: finalStartIndex, end: finalEndIndex, label: selectedText })
         await this.setState({ annotations })
       }
 

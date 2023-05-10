@@ -12,6 +12,12 @@ straightforward as possible.
  
 ### Fixed
 
+## [0.3.1] - 2023-05-10
+
+### Fixed
+
+- Impossible to select a punctuation at the end of an annotation, it is directly removed from the final annotation. (Now to select with punctuation at the end, you have to highlight until the final punctuation, without letting the autocompletion select the entire last word)
+
 ## [0.3.0] - 2023-05-08
 
 ### Added
