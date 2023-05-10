@@ -2,7 +2,7 @@ import os
 
 import streamlit.components.v1 as components
 
-RELEASE = False
+RELEASE = True
 
 if not RELEASE:
     _component_func = components.declare_component("st_text_annotator", url="http://localhost:3001")
