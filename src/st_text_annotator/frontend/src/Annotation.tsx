@@ -112,32 +112,27 @@ class Annotation extends StreamlitComponentBase<State> {
       startIndex += charsBeforeStart
       endIndex += charsBeforeEnd
 
-      while (document.querySelector("#actual-text")?.textContent?.charAt(startIndex + startAdjustment - 1) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(startIndex + startAdjustment - 1) !== undefined) {
-        if (document.querySelector("#actual-text")?.textContent?.charAt(startIndex + startAdjustment - 1) === '') {
+      const textContent = document.querySelector("#actual-text")?.textContent || ""
+
+      const reStartIndex = /^[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g
+      while (!(textContent.charAt(startIndex + startAdjustment - 1) === " " || textContent.charAt(startIndex + startAdjustment - 1).match(reStartIndex)) && textContent?.charAt(startIndex + startAdjustment - 1) !== undefined) {
+        if (textContent.charAt(startIndex + startAdjustment - 1) === '') {
           break
         }
 
         startAdjustment -= 1
       }
 
-      while (document.querySelector("#actual-text")?.textContent?.charAt(endIndex + endAdjustment) !== " " && document.querySelector("#actual-text")?.textContent?.charAt(endIndex + endAdjustment) !== undefined) {
-        if (document.querySelector("#actual-text")?.textContent?.charAt(endIndex + endAdjustment) === '') {
+      const reEndIndex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]$/g
+      while (!(textContent.charAt(endIndex + endAdjustment) === " " || textContent.charAt(endIndex + endAdjustment).match(reEndIndex)) && textContent.charAt(endIndex + endAdjustment) !== undefined) {
+        if (textContent.charAt(endIndex + endAdjustment) === '') {
           break
         }
 
         endAdjustment += 1
       }
 
-      selectedText = document.querySelector("#actual-text")?.textContent?.slice(startIndex + startAdjustment, endIndex + endAdjustment) || ""
-
-      // remove commas, periods, etc. from the end of the selection if end adjustment is superior to 0
-      if (endAdjustment > 0) {
-        const re = /[.,/#!$%^&*;:{}=\-_`~()]$/g
-        while (selectedText.match(re)) {
-          selectedText = selectedText.slice(0, -1)
-          endAdjustment -= 1
-        }
-      }
+      selectedText = textContent.slice(startIndex + startAdjustment, endIndex + endAdjustment) || ""
 
       const { annotations, selectedReference } = this.state
 

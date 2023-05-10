@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     st.title("StTextAnnotator")
 
-    text = "Lorem ipsum dolor sit et amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, Apple Inc. is good company"
+    text = "Lorem ipsum dolor sit et amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
     annotations = [
       [

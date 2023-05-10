@@ -12,6 +12,12 @@ straightforward as possible.
  
 ### Fixed
 
+## [0.3.3] - 2023-05-10
+
+### Fixed
+
+- Special characters are not removed anymore
+
 ## [0.3.1] - 2023-05-10
 
 ### Fixed
