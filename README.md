@@ -1,5 +1,7 @@
 <h1> streamlit-annotation </h1>
 
+- [Streamlit Text Annotator](#streamlit-text-annotator)
+- [Demo](#demo)
 - [Install](#install)
 - [Quick Use](#quick-use)
 - [Development](#development)
@@ -17,6 +19,10 @@
 [![Downloads](https://pepy.tech/badge/st-text-annotator/week)](https://pepy.tech/project/st-text-annotator)
 
 Streamlit Text Annotator is a Streamlit component that allows you to annotate text.
+
+# Demo
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://st-text-annotator.streamlit.app/)
 
 ![](docs/example.gif)
 
