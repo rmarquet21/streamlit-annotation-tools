@@ -12,8 +12,8 @@ exclude = ["**/node_modules/**/*"]
 packages = [{include = "st_text_annotator", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-streamlit = "^1.21.0"
+python = ">=3.8,<3.9.7 || >3.9.7,<4.0.0"
+streamlit = "1.21.0"
 
 [build-system]
 requires = ["poetry-core"]
