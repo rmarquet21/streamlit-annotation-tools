@@ -48,4 +48,4 @@ urllib3==2.0.2 ; python_version >= "3.8" and python_full_version != "3.9.7" and 
 validators==0.20.0 ; python_version >= "3.8" and python_full_version != "3.9.7" and python_full_version < "4.0.0"
 watchdog==3.0.0 ; python_version >= "3.8" and python_full_version != "3.9.7" and python_full_version < "4.0.0" and platform_system != "Darwin"
 zipp==3.15.0 ; python_version >= "3.8" and python_full_version != "3.9.7" and python_full_version < "4.0.0"
-st-text-annotator==0.3.4
+streamlit_annotation_tools

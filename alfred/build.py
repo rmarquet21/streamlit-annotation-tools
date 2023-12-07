@@ -7,7 +7,7 @@ def build():
     poetry = alfred.sh("poetry")
     root = alfred.project_directory()
 
-    os.chdir(os.path.join(root, "src", "st_text_annotator", "frontend"))
+    os.chdir(os.path.join(root, "src", "streamlit_annotation_tools", "frontend"))
     alfred.run(npm, ["run", "build"])
 
     os.chdir(os.path.join(root, ))

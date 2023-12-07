@@ -26,6 +26,6 @@ def version_update(type):
     alfred.run(poetry, ["version", update_version(version, type)])
 
     directory = alfred.project_directory()
-    os.chdir(os.path.join(directory, "src", "st_text_annotator", "frontend"))
+    os.chdir(os.path.join(directory, "src", "streamlit_annotation_tools", "frontend"))
     alfred.run(npm, ["version", update_version(version, type)])
 

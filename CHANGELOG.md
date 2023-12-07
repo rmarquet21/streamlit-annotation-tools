@@ -20,7 +20,7 @@ straightforward as possible.
 
 ### Fixed
 
-- hidden state when adding a new list [#1](https://github.com/rmarquet21/st-text-annotator/issues/1)
+- hidden state when adding a new list [#1](https://github.com/rmarquet21/streamlit-annotation-tools/issues/1)
 
 ## [0.3.3] - 2023-05-10
 

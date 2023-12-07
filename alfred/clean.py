@@ -5,4 +5,4 @@ import alfred
 def clean():
     rm = alfred.sh('rm')
 
-    alfred.run(rm, ['-rf', 'build', 'dist', '*.egg-info', 'src/st_text_annotator/frontend/build'])
+    alfred.run(rm, ['-rf', 'build', 'dist', '*.egg-info', 'src/streamlit_annotation_tools/frontend/build'])
