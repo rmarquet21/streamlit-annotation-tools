@@ -15,5 +15,5 @@ st.markdown("## Example")
 text = st.text_input("Enter the text you want to annotate")
 
 if text:
-    StTextAnnotator(text, [])
-
+    results = StTextAnnotator(text, [])
+    st.write(results)
