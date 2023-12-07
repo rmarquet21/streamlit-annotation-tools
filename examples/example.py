@@ -21,7 +21,7 @@ def highlighter_page():
     highlights = text_highlighter(text, highlights)
 
     st.write("Annotations:")
-    st.writehighlights
+    st.write(highlights)
 
 
 def labeler_page():
