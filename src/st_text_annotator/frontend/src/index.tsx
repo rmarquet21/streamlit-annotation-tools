@@ -1,8 +1,13 @@
-import { createRoot } from 'react-dom/client';
-import MyComponent from "./Annotation"
-import React from 'react';
+import React from "react"
+import ReactDOM from "react-dom"
+import Annotation from "./components/Annotation"
+import StreamlitProvider from "./utils/StreamlitProvider"
 
-const container = document.getElementById("root")
-const root = createRoot(container)
-
-root.render(<MyComponent />)
+ReactDOM.render(
+  <React.StrictMode>
+    <StreamlitProvider>
+      <Annotation />
+    </StreamlitProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
+)

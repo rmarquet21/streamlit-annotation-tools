@@ -1,17 +1,19 @@
 {
   "name": "steamlit-text-annotator",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": true,
   "dependencies": {
     "@types/jest": "^29.5.0",
-    "@types/node": "^18.15.11",
+    "@types/node": "^20.10.0",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^4.0.3",
-    "streamlit-component-lib": "^1.4.0",
-    "typescript": "^3.2.1"
+    "react-scripts": "^5.0.1",
+    "streamlit-component-lib": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.2"
   },
   "scripts": {
     "start": "react-scripts start",

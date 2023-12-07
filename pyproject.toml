@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "st-text-annotator"
-version = "0.3.3"
+version = "0.3.4"
 description = "Component for annotating text for NLP resolution"
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent"]
 authors = ["Robin Marquet <robin.marquet@epitech.eu>"]
@@ -14,6 +14,9 @@ packages = [{include = "st_text_annotator", from = "src"}]
 [tool.poetry.dependencies]
 python = ">=3.8,<3.9.7 || >3.9.7,<4.0.0"
 streamlit = "1.21.0"
+
+[tool.poetry.group.dev.dependencies]
+alfred-cli = "^2.2.2"
 
 [build-system]
 requires = ["poetry-core"]

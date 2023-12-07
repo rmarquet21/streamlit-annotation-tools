@@ -12,6 +12,16 @@ straightforward as possible.
  
 ### Fixed
 
+## [0.3.4] - 2023-12-07
+
+### Changed
+
+- Update architecture of frontend components
+
+### Fixed
+
+- hidden state when adding a new list #1
+
 ## [0.3.3] - 2023-05-10
 
 ### Fixed

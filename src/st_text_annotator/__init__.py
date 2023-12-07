@@ -2,7 +2,7 @@ import os
 
 import streamlit.components.v1 as components
 
-RELEASE = True
+RELEASE = os.environ.get("ST_TEXT_ANNOTATOR_RELEASE", "true") == "true"
 
 if not RELEASE:
     _component_func = components.declare_component("st_text_annotator", url="http://localhost:3001")
@@ -12,7 +12,7 @@ else:
     _component_func = components.declare_component("StTextAnnotator", path=build_dir)
 
 
-def StTextAnnotator(text, annotations=[]):
+def StTextAnnotator(text: str, annotations=[]):
     """Create a new instance of "StTextAnnotator".
 
     Parameters
@@ -46,14 +46,29 @@ def StTextAnnotator(text, annotations=[]):
         
     Returns
     -------
-    dict or None
-        The annotations made by the user in the form of a dictionary with the following structure: 
-        {
-            label: "label",
-            start: 0,
-            end: 10
-        }
-
+    list or None
+        The annotations made by the user in the form of a list of dictionaries with the following structure:
+        [
+            [
+                {
+                    label: "label",
+                    start: 0,
+                    end: 10
+                },
+                {
+                    label: "label",
+                    start: 0,
+                    end: 10
+                }
+            ],
+            [
+                {
+                    label: "label",
+                    start: 0,
+                    end: 10
+                }
+            ]
+        ]
     """
 
     # Call through to our private component function. Arguments we pass here
@@ -90,5 +105,6 @@ if __name__ == "__main__":
     ]
     
     annotations = StTextAnnotator(text, annotations)
-    
-    print(annotations)
+
+    st.write("Annotations:")
+    st.write(annotations)
