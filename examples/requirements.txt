@@ -1,2 +1,0 @@
-streamlit
-st_text_annotator==0.3.4
