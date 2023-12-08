@@ -1,6 +1,6 @@
 {
   "name": "steamlit-annotation-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@types/jest": "^29.5.0",

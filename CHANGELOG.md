@@ -12,6 +12,22 @@ straightforward as possible.
  
 ### Fixed
 
+## [1.0.1] - 2023-12-09
+
+### Fixed
+
+- Support for Streamlit 1.21.0 minimum [#3](https://github.com/rmarquet21/streamlit-annotation-tools/issues/3)
+
+## [1.0.0] - 2023-12-08
+
+### Added
+
+- Add `text_labeler` component
+
+### Changed
+
+- rename 'text_annotation' to 'text_highlighter'
+
 ## [0.3.4] - 2023-12-07
 
 ### Changed

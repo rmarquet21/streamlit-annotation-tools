@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "streamlit-annotation-tools"
-version = "1.0.0"
+version = "1.0.1"
 description = "Component for annotating text for NLP resolution"
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent"]
 authors = ["Robin Marquet <robin.marquet@epitech.eu>"]
@@ -13,7 +13,7 @@ packages = [{include = "streamlit_annotation_tools", from = "src"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.9.7 || >3.9.7,<4.0.0"
-streamlit = "1.21.0"
+streamlit = "^1.21.0"
 
 [tool.poetry.group.dev.dependencies]
 alfred-cli = "^2.2.2"
