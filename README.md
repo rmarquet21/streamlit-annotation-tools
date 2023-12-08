@@ -24,7 +24,7 @@ Streamlit Annotation Tools is a Streamlit component that gives you access to var
 
 # Demo
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit-annotation-tools.streamlit.app/)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://annotation-tools.streamlit.app/)
 
 ![](docs/example.gif)
 
