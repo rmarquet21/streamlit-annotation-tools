@@ -2,10 +2,13 @@
 
 - [Streamlit Annotation Tools](#streamlit-annotation-tools)
 - [Demo](#demo)
-- [Install](#install)
-- [Quick Use](#quick-use)
+  - [Try](#try)
   - [Text Highlighter](#text-highlighter)
   - [Text Labeler](#text-labeler)
+- [Install](#install)
+- [Quick Use](#quick-use)
+  - [Text Highlighter](#text-highlighter-1)
+  - [Text Labeler](#text-labeler-1)
 - [Development](#development)
   - [Install](#install-1)
   - [Run](#run)
@@ -24,9 +27,14 @@ Streamlit Annotation Tools is a Streamlit component that gives you access to var
 
 # Demo
 
+## Try
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://annotation-tools.streamlit.app/)
 
-![](docs/example.gif)
+## Text Highlighter
+![](docs/highlight_tool.gif)
+
+## Text Labeler
+![](docs/label_tool.gif)
 
 # Install
 
