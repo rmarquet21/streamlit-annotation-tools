@@ -47,3 +47,4 @@ urllib3==2.1.0 ; python_version >= "3.8" and python_full_version != "3.9.7" and 
 validators==0.22.0 ; python_version >= "3.8" and python_full_version != "3.9.7" and python_full_version < "4.0.0"
 watchdog==3.0.0 ; python_version >= "3.8" and python_full_version != "3.9.7" and python_full_version < "4.0.0" and platform_system != "Darwin"
 zipp==3.17.0 ; python_version >= "3.8" and python_full_version != "3.9.7" and python_full_version < "4.0.0"
+streamlit-annotation-tools
